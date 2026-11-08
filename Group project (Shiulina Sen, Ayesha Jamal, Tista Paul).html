@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HireMe - Online Job Portal</title>
+<style>
+:root{--blue:#2563eb;--blue-d:#1d4ed8;--ink:#0f172a;--mute:#64748b;--bg:#f8fafc;--line:#e2e8f0;--ok:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.6rem;font-weight:800;cursor:pointer;border:0;background:none;padding:0;color:var(--ink)}
+.logo i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;display:grid;place-items:center;font-style:normal;font-size:1.1rem}
+.logo b{color:var(--blue)}
+nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:var(--blue);color:#fff}
+button:hover{background:var(--blue-d)}
+button.alt{background:#fff;color:var(--ink);border:1px solid var(--line)}
+button.alt:hover{background:var(--bg)}
+button.link{background:none;color:var(--mute)}
+button.link:hover{background:none;color:var(--ink)}
+button.danger{background:var(--bad)}
+:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+main{max-width:1000px;margin:0 auto;padding:0 20px 30px}
+.hero{text-align:center;padding:40px 10px 24px;margin-bottom:30px;background:radial-gradient(ellipse at top,#e0ebff,transparent 70%)}
+.pill{display:inline-block;background:#dbeafe;color:var(--blue-d);border:1px solid #bfdbfe;border-radius:99px;padding:6px 16px;font-weight:600;font-size:.9rem}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;margin:18px auto 10px;max-width:720px;font-weight:800}
+.hero p{color:var(--mute);font-size:1.1rem;margin:0 0 24px}
+.sbox{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;display:grid;grid-template-columns:2fr 1.4fr 1.2fr auto;gap:10px;box-shadow:0 8px 24px #2563eb14;max-width:900px;margin:0 auto}
+input,select,textarea{font:inherit;width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.pop{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;color:var(--mute);font-size:.9rem}
+.chip{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:5px 14px;font-weight:500}
+.chip:hover{background:#dbeafe}
+h2{margin:0 0 4px;font-size:1.7rem}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.fp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+.fp[hidden]{display:none}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px;transition:box-shadow .15s}
+.card:hover{box-shadow:0 6px 20px #0f172a14}
+.jl{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:1.4rem;color:#fff;flex:none}
+.tag{display:inline-block;border-radius:99px;padding:2px 12px;font-size:.82rem;font-weight:600;margin-left:6px;background:#e0f2fe;color:#075985}
+.tag.r{background:#f3e8ff;color:#6b21a8}
+.meta{color:var(--mute);font-size:.93rem}
+.form{max-width:500px;margin:30px auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px}
+label{display:block;font-weight:600;margin:12px 0 4px}
+.msg{padding:10px 14px;border-radius:10px;margin:14px 0}
+.msg.err{background:#fee2e2;color:var(--bad)}
+.msg.ok{background:#dcfce7;color:var(--ok)}
+.status{font-weight:700}.status.Accepted{color:var(--ok)}.status.Rejected{color:var(--bad)}
+.empty{text-align:center;color:var(--mute);padding:36px}
+.trust{text-align:center;margin:40px 0 10px;color:var(--mute)}
+.trust div{display:flex;flex-wrap:wrap;gap:10px 28px;justify-content:center;margin-top:10px;font-size:1.15rem;font-weight:700;color:#94a3b8}
+footer{background:#fff;border-top:1px solid var(--line);padding:26px 20px;text-align:center;color:var(--mute);font-size:.92rem}
+footer a{color:var(--mute);margin:0 10px;text-decoration:none}
+footer a:hover{color:var(--blue)}
+@media(max-width:760px){.sbox,.fp{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <button class="logo" id="home" aria-label="HireMe home"><i>H</i><span>Hire<b>Me</b></span></button>
+  <nav id="nav"></nav>
+</header>
+<main id="app"></main>
+<footer>
+  <div><a href="#">About us</a><a href="#">Help center</a><a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a></div>
+  <p>&copy; 2026 HireMe. Where Your Ambition Meets Opportunity.</p>
+</footer>
+
+<script>
+/* ---------- Helpers ---------- */
+const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch (e) { return d; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const opts = (arr, sel) => arr.map(a => `<option ${a === sel ? 'selected' : ''}>${a}</option>`).join('');
+
+/* ---------- Data ---------- */
+const CATS = ['Technology', 'Education', 'Marketing', 'Design', 'Finance', 'Operations'];
+const TYPES = ['Full-time', 'Part-time', 'Internship', 'Contract'];
+const MODES = ['Remote', 'On-site', 'Hybrid'];
+const LEVELS = ['Entry Level', 'Mid Level', 'Senior Level'];
+const COLORS = ['#2563eb', '#7c3aed', '#0891b2', '#db2777', '#ea580c', '#16a34a'];
+const seed = [
+  {id:'j1', title:'Senior Full Stack Engineer', company:'PixelWorks', location:'Kolkata', category:'Technology', type:'Full-time', mode:'Remote', level:'Senior Level', salary:'18-28 LPA', desc:'Build and scale JavaScript/Node.js products.', owner:'demo'},
+  {id:'j2', title:'Science Teacher (Class 9-10)', company:'Greenfield School', location:'Kolkata', category:'Education', type:'Full-time', mode:'On-site', level:'Mid Level', salary:'3-4.5 LPA', desc:'B.Ed required. Biology/Chemistry preferred.', owner:'demo'},
+  {id:'j3', title:'UI/UX Designer', company:'DesignNest', location:'Bengaluru', category:'Design', type:'Full-time', mode:'Hybrid', level:'Mid Level', salary:'8-14 LPA', desc:'Design web and mobile screens in Figma.', owner:'demo'},
+  {id:'j4', title:'Content Writer', company:'WriteRight', location:'Remote', category:'Marketing', type:'Part-time', mode:'Remote', level:'Entry Level', salary:'15-25k / month', desc:'Write blogs in English and Hindi. Freshers welcome.', owner:'demo'},
+  {id:'j5', title:'Python Engineer', company:'DataKart', location:'Pune', category:'Technology', type:'Full-time', mode:'Hybrid', level:'Mid Level', salary:'10-16 LPA', desc:'APIs, automation and data pipelines in Python.', owner:'demo'},
+  {id:'j6', title:'Accounts Executive', company:'Shree Logistics', location:'Howrah', category:'Finance', type:'Full-time', mode:'On-site', level:'Entry Level', salary:'18-24k / month', desc:'Tally, GST filing and MS Excel.', owner:'demo'},
+  {id:'j7', title:'Backend Intern (Node.js)', company:'CodeNest', location:'Remote', category:'Technology', type:'Internship', mode:'Remote', level:'Entry Level', salary:'8-12k / month', desc:'Learn REST APIs and MongoDB. 3 months.', owner:'demo'},
+  {id:'j8', title:'Operations Manager', company:'FreshBasket', location:'Kolkata', category:'Operations', type:'Full-time', mode:'On-site', level:'Senior Level', salary:'9-13 LPA', desc:'Lead supply chain and a team of 20.', owner:'demo'}
+];
+let users = load('hm_users', []);
+let jobs  = load('hm_jobs', seed);
+let apps  = load('hm_apps', []);
+let me    = load('hm_me', null);
+/* Demo employer: owns the sample jobs so applications on them can be accepted/rejected */
+if (!users.some(u => u.id === 'demo')) { users.push({id:'demo', name:'Demo Employer', email:'demo@hireme.com', pass:'demo123', role:'employer'}); save('hm_users', users); }
+
+let F = {q:'', loc:'', cat:'', type:'', mode:'', level:''};
+let view = 'home', notice = null;
+const app = document.getElementById('app'), nav = document.getElementById('nav');
+
+function go(v, n) { view = v; notice = n || null; render(); window.scrollTo(0, 0); }
+const msg = n => n ? `<div class="msg ${n.t}" role="status">${esc(n.m)}</div>` : '';
+document.getElementById('home').onclick = () => go('home');
+
+/* ---------- Navigation ---------- */
+function renderNav() {
+  let h = '';
+  if (!me) h = `<button class="link" data-go="login">Login</button><button data-go="register">Register</button>`;
+  else {
+    if (me.role === 'employer') h += `<button class="link" data-go="post">Post a job</button>`;
+    h += `<button class="link" data-go="dash">${me.role === 'employer' ? 'My postings' : 'My applications'}</button>`;
+    h += `<button class="alt" id="logout">Logout (${esc(me.name)})</button>`;
+  }
+  nav.innerHTML = h;
+  nav.querySelectorAll('[data-go]').forEach(b => b.onclick = () => go(b.dataset.go));
+  const lo = document.getElementById('logout');
+  if (lo) lo.onclick = () => { me = null; save('hm_me', null); go('home', {t:'ok', m:'You have been logged out.'}); };
+}
+
+/* ---------- Home ---------- */
+function viewHome() {
+  const cos = [...new Set(jobs.map(j => j.company))];
+  app.innerHTML = msg(notice) + `
+  <section class="hero">
+    <span class="pill">${jobs.length} active vacancies listed</span>
+    <h1>Where Your Ambition Meets Opportunity</h1>
+    <p>Explore jobs, connect with employers, grow beyond limit.</p>
+    <div class="sbox">
+      <input id="q" placeholder="Job title, skills, or company" value="${esc(F.q)}" aria-label="Job title, skills, or company">
+      <input id="loc" placeholder="City, state, or 'Remote'" value="${esc(F.loc)}" aria-label="Location">
+      <select id="cat" aria-label="Category"><option value="">All Categories</option>${opts(CATS, F.cat)}</select>
+      <button id="sb">Search Jobs</button>
+    </div>
+    <div class="pop"><span>Popular searches:</span>${['Engineer', 'Python', 'Remote', 'Designer', 'Teacher'].map(p => `<button class="chip" data-pop="${p}">${p}</button>`).join('')}</div>
+  </section>
+  <section>
+    <div class="row"><div><h2>Recommended Opportunities</h2><div class="meta" id="cnt"></div></div>
+      <div><button class="alt" id="ft">Filter Opportunities</button> <button class="link" id="rs">Reset All Filters</button></div></div>
+    <div class="fp" id="fp" hidden>
+      <select id="type" aria-label="Job type"><option value="">All job types</option>${opts(TYPES, F.type)}</select>
+      <select id="mode" aria-label="Work mode"><option value="">Remote / On-site / Hybrid</option>${opts(MODES, F.mode)}</select>
+      <select id="level" aria-label="Experience level"><option value="">All levels</option>${opts(LEVELS, F.level)}</select>
+    </div>
+    <div id="list"></div>
+  </section>
+  <section class="trust">Hiring now on HireMe<div>${cos.slice(0, 6).map(esc).join('<span>&bull;</span>')}</div></section>`;
+
+  const read = () => { ['q', 'loc', 'cat'].forEach(id => F[id] = document.getElementById(id).value.trim()); renderList(); };
+  document.getElementById('sb').onclick = () => { read(); document.getElementById('cnt').scrollIntoView({behavior:'smooth'}); };
+  ['q', 'loc'].forEach(id => document.getElementById(id).onkeydown = e => { if (e.key === 'Enter') document.getElementById('sb').click(); });
+  document.getElementById('cat').onchange = read;
+  ['type', 'mode', 'level'].forEach(id => document.getElementById(id).onchange = e => { F[id] = e.target.value; renderList(); });
+  document.getElementById('ft').onclick = () => { const p = document.getElementById('fp'); p.hidden = !p.hidden; };
+  document.getElementById('rs').onclick = () => { F = {q:'', loc:'', cat:'', type:'', mode:'', level:''}; viewHome(); };
+  app.querySelectorAll('[data-pop]').forEach(b => b.onclick = () => {
+    F = {q:'', loc:'', cat:'', type:'', mode:'', level:''};
+    if (b.dataset.pop === 'Remote') F.loc = 'Remote'; else F.q = b.dataset.pop;
+    viewHome(); document.getElementById('cnt').scrollIntoView({behavior:'smooth'});
+  });
+  document.getElementById('list').onclick = e => {
+    const a = e.target.closest('[data-apply]'); if (a) applyTo(a.dataset.apply);
+    if (e.target.closest('[data-go-login]')) go('login');
+  };
+  if (F.type || F.mode || F.level) document.getElementById('fp').hidden = false;
+  renderList();
+}
+
+function renderList() {
+  const has = (s, t) => String(s || '').toLowerCase().includes(t.toLowerCase());
+  const list = jobs.filter(j =>
+    (!F.q || has(j.title + ' ' + j.company + ' ' + j.desc + ' ' + j.category, F.q)) &&
+    (!F.loc || has(j.location, F.loc) || has(j.mode, F.loc)) &&
+    (!F.cat || j.category === F.cat) && (!F.type || j.type === F.type) &&
+    (!F.mode || j.mode === F.mode) && (!F.level || j.level === F.level));
+  document.getElementById('cnt').textContent = `Showing ${list.length} opportunit${list.length === 1 ? 'y' : 'ies'}`;
+  document.getElementById('list').innerHTML = list.length ? list.map(jobCard).join('')
+    : '<div class="empty">No jobs match these filters. Click Reset All Filters to see every job.</div>';
+}
+
+function jobCard(j) {
+  const applied = me && apps.some(a => a.jobId === j.id && a.userId === me.id);
+  let action = '';
+  if (!me) action = `<button data-go-login>Login to apply</button>`;
+  else if (me.role === 'seeker') action = applied ? `<span class="tag">Applied</span>` : `<button data-apply="${j.id}">Apply now</button>`;
+  const color = COLORS[(j.company || 'A').charCodeAt(0) % COLORS.length];
+  return `<div class="card"><div class="row">
+    <div class="row" style="flex-wrap:nowrap;justify-content:flex-start"><div class="jl" style="background:${color}">${esc((j.company || '?')[0].toUpperCase())}</div>
+      <div><h3 style="margin:0">${esc(j.title)}</h3>
+      <div class="meta">${esc(j.company)} &bull; ${esc(j.level || 'Open to all')}</div></div></div>
+    <div><span class="tag r">${esc(j.mode || 'On-site')}</span><span class="tag">${esc(j.type)}</span></div></div>
+    <div class="meta" style="margin:12px 0 6px">&#128205; ${esc(j.location)} &nbsp;&nbsp; &#128176; ${esc(j.salary)}</div>
+    <div>${esc(j.desc)}</div>
+    <div style="margin-top:12px;text-align:right">${action}</div></div>`;
+}
+
+/* ---------- Login / Register ---------- */
+function viewAuth(mode) {
+  const reg = mode === 'register';
+  app.innerHTML = `<div class="form"><h2>${reg ? 'Create your account' : 'Login'}</h2>${msg(notice)}
+    <form id="af" novalidate>
+      ${reg ? `<label for="n">Full name</label><input id="n" required>` : ''}
+      <label for="e">Email</label><input id="e" type="email" required>
+      <label for="p">Password (min 6 characters)</label><input id="p" type="password" required>
+      ${reg ? `<label for="r">I am a</label><select id="r"><option value="seeker">Job seeker</option><option value="employer">Employer</option></select>` : ''}
+      <p><button type="submit">${reg ? 'Register' : 'Login'}</button></p>
+    </form></div>`;
+  document.getElementById('af').onsubmit = e => {
+    e.preventDefault();
+    const email = document.getElementById('e').value.trim().toLowerCase();
+    const pass = document.getElementById('p').value;
+    if (!/^\S+@\S+\.\S+$/.test(email)) return go(mode, {t:'err', m:'Enter a valid email address.'});
+    if (pass.length < 6) return go(mode, {t:'err', m:'Password must be at least 6 characters.'});
+    if (reg) {
+      const name = document.getElementById('n').value.trim();
+      if (!name) return go(mode, {t:'err', m:'Enter your name.'});
+      if (users.some(u => u.email === email)) return go(mode, {t:'err', m:'This email is already registered. Please login.'});
+      const u = {id: uid(), name, email, pass, role: document.getElementById('r').value};
+      users.push(u); save('hm_users', users);
+      me = u; save('hm_me', me); go('home', {t:'ok', m:'Welcome, ' + u.name + '!'});
+    } else {
+      const u = users.find(x => x.email === email && x.pass === pass);
+      if (!u) return go(mode, {t:'err', m:'Email or password is wrong.'});
+      me = u; save('hm_me', me); go('home', {t:'ok', m:'Logged in as ' + u.name + '.'});
+    }
+  };
+}
+
+/* ---------- Post a job ---------- */
+function viewPost() {
+  if (!me || me.role !== 'employer') return go('login', {t:'err', m:'Login as an employer to post jobs.'});
+  app.innerHTML = `<div class="form"><h2>Post a job</h2>${msg(notice)}
+    <form id="pf">
+      <label for="t">Job title</label><input id="t" required>
+      <label for="c">Company</label><input id="c" required>
+      <label for="l">Location</label><input id="l" required>
+      <label for="ca">Category</label><select id="ca">${opts(CATS)}</select>
+      <label for="ty">Type</label><select id="ty">${opts(TYPES)}</select>
+      <label for="mo">Work mode</label><select id="mo">${opts(MODES)}</select>
+      <label for="lv">Level</label><select id="lv">${opts(LEVELS)}</select>
+      <label for="s">Salary</label><input id="s" placeholder="e.g. 4-6 LPA" required>
+      <label for="d">Description</label><textarea id="d" rows="4" required></textarea>
+      <p><button type="submit">Publish job</button></p>
+    </form></div>`;
+  document.getElementById('pf').onsubmit = e => {
+    e.preventDefault();
+    const g = id => document.getElementById(id).value.trim();
+    jobs.unshift({id: uid(), title: g('t'), company: g('c'), location: g('l'), category: g('ca'), type: g('ty'), mode: g('mo'), level: g('lv'), salary: g('s'), desc: g('d'), owner: me.id});
+    save('hm_jobs', jobs);
+    go('dash', {t:'ok', m:'Job published.'});
+  };
+}
+
+/* ---------- Dashboard ---------- */
+function viewDash() {
+  if (!me) return go('login', {t:'err', m:'Please login first.'});
+  if (me.role === 'seeker') {
+    const mine = apps.filter(a => a.userId === me.id);
+    app.innerHTML = msg(notice) + `<h2 style="margin-top:28px">My applications (${mine.length})</h2>` +
+      (mine.length ? mine.map(a => { const j = jobs.find(x => x.id === a.jobId) || {title:'(job removed)', company:''};
+        return `<div class="card"><div class="row"><div><h3 style="margin:0">${esc(j.title)}</h3><div class="meta">${esc(j.company)} &bull; Applied on ${esc(a.date)}</div></div>
+        <div class="status ${a.status}">${a.status}</div></div></div>`; }).join('')
+      : '<div class="empty">You have not applied to any job yet. Browse jobs and click Apply now.</div>');
+  } else {
+    const mine = jobs.filter(j => j.owner === me.id);
+    app.innerHTML = msg(notice) + `<h2 style="margin-top:28px">My postings (${mine.length})</h2>` +
+      (mine.length ? mine.map(j => {
+        const ja = apps.filter(a => a.jobId === j.id);
+        return `<div class="card"><div class="row"><div><h3 style="margin:0">${esc(j.title)}</h3><div class="meta">${esc(j.location)} &bull; ${ja.length} applicant${ja.length === 1 ? '' : 's'}</div></div>
+          <button class="danger" data-del="${j.id}">Delete</button></div>
+          ${ja.map(a => `<div class="row" style="border-top:1px solid var(--line);margin-top:12px;padding-top:12px">
+            <div><b>${esc(a.name)}</b> <span class="meta">${esc(a.email)}</span><br><span class="status ${a.status}">${a.status}</span></div>
+            <div><button class="alt" data-st="${a.id}|Accepted">Accept</button> <button class="alt" data-st="${a.id}|Rejected">Reject</button></div></div>`).join('')}
+        </div>`; }).join('')
+      : '<div class="empty">No jobs posted yet. Use Post a job to add your first listing.</div>');
+    app.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+      if (!confirm('Delete this job and its applications?')) return;
+      jobs = jobs.filter(j => j.id !== b.dataset.del); apps = apps.filter(a => a.jobId !== b.dataset.del);
+      save('hm_jobs', jobs); save('hm_apps', apps); go('dash', {t:'ok', m:'Job deleted.'});
+    });
+    app.querySelectorAll('[data-st]').forEach(b => b.onclick = () => {
+      const [id, st] = b.dataset.st.split('|'); const a = apps.find(x => x.id === id);
+      if (a) { a.status = st; save('hm_apps', apps); go('dash', {t:'ok', m:'Status updated to ' + st + '.'}); }
+    });
+  }
+}
+
+function applyTo(jobId) {
+  if (!me || me.role !== 'seeker') return;
+  if (apps.some(a => a.jobId === jobId && a.userId === me.id)) return;
+  apps.push({id: uid(), jobId, userId: me.id, name: me.name, email: me.email, status: 'Pending', date: new Date().toLocaleDateString('en-IN')});
+  save('hm_apps', apps);
+  go('home', {t:'ok', m:'Application sent. Track it under My applications.'});
+}
+
+/* ---------- Router ---------- */
+function render() {
+  renderNav();
+  if (view === 'home') viewHome();
+  else if (view === 'login') viewAuth('login');
+  else if (view === 'register') viewAuth('register');
+  else if (view === 'post') viewPost();
+  else if (view === 'dash') viewDash();
+}
+render();
+</script>
+</body>
+</html>
